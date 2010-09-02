@@ -1,9 +1,11 @@
 var http = require('http'), 
-log = require('../lib/socket-logger'),
+log = require('../lib/socket-logger').defaultLogger,
 io = require('./socket.io'),
 
 server = http.createServer(function(req, res){
 });
+
+log.logLevel = 1;
 
 server.listen(8080);
 log.authToken = 'my_secret_token_for_the_dashboard_client';
