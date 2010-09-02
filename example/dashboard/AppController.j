@@ -32,7 +32,7 @@
 - (void)socketDidConnect:(SCSocket)aSocket
 {
     lps = [0];
-    [theSocket sendMessage:{'authToken' : 'my_secret_token_for_the_dashboard_client'}];
+    [theSocket sendMessage:'my_secret_token_for_the_dashboard_client'];
     var theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() styleMask:CPBorderlessBridgeWindowMask],
         contentView = [theWindow contentView];
     label1 = [CPTextField labelWithTitle:"Breakdown"];
@@ -91,9 +91,8 @@
 
 - (void)socket:(SCSocket)aSocket didReceiveMessage:(CPString)aMessage
 {
-    if (aMessage.body && aMessage.body.c)
-    {
-        var theLetter = aMessage.body.c;
+    if (aMessage[3] && aMessage[3].length == 1) {
+        var theLetter = aMessage[3];
         var theIndex = theLetter.charCodeAt(0) - 'a'.charCodeAt(0);
         values[theIndex]++;
         [barChart reloadData];

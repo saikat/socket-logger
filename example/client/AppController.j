@@ -20,7 +20,7 @@
 - (void)keyDown:(CPEvent)anEvent
 {
     [super keyDown:anEvent];
-    [theSocket sendMessage:{'c' : [anEvent characters]}];
+    [theSocket sendMessage:[anEvent characters]];
 }
 @end
 
