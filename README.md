@@ -42,12 +42,19 @@ You will need to install [Socket.IO-node](http://github.com/learnboost/socket.io
 Running the demo
 ================
 
-
+1. Clone this repository.  Be sure to use the --recursive flag.
+2. Run "node server.js" in the example folder
+3. Open example/client/index.html in your browser
+4. Open example/dashboard/index.html in another windew
+5. Start tying in the client asd watch the dashboard.
 
 Screenshots of demo
 ===================
 
+## Client
 ![Client](http://imgur.com/S3Wke.png)
+
+## Dashboard
 ![Dashboard](http://imgur.com/PJy3x.png)
 
 Caveats and Notes
