@@ -15,7 +15,7 @@ How to use
 You will need to install [Socket.IO-node](http://github.com/learnboost/socket.io-node) and have a socket-io server running.  Then, clone this repo.  Now put this in your server and smoke it:
 
     var http = require('http'), 
-    log = require('../lib/socket-logger'),
+    log = require('../lib/socket-logger').defaultLogger,
     io = require('./socket.io'),
 
     server = http.createServer(function(req, res){
