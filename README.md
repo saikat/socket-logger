@@ -7,7 +7,7 @@ By default, socket logger is a simple logger that you can use with your [Socket.
 
 It's a little different from other loggers in that you can log not just connections and disconnections, but also each message.  Also, the log format is not Apache Common Log Format, but instead JSON-parsable strings.  So, you log JS objects, not strings.
 
-The secret sauce of socket-logger is how easy it makes it to set up a web client that gets information about your server.  Simply create a Socket.IO client that connects to your server with a specified auth token, and now your client gets JSON messages about all the socket connections and messages your server is handling.  I'll have an example client up soon.
+The secret sauce of socket-logger is how easy it makes it to set up a web client that gets information about your server.  Simply create a Socket.IO client that connects to your server with a specified auth token, and now your client gets JSON messages about all the socket connections and messages your server is handling.  Check out the example for a demo of this.
 
 How to use
 ============
@@ -15,29 +15,26 @@ How to use
 You will need to install [Socket.IO-node](http://github.com/learnboost/socket.io-node) and have a socket-io server running.  Then, clone this repo.  Now put this in your server and smoke it:
 
     var http = require('http'), 
-        logger = require('./path/to/socket-logger'),
-    	io = require('./path/to/socket.io'),
+    log = require('../lib/socket-logger'),
+    io = require('./socket.io'),
 
-	server = http.createServer(function(req, res){
-	});
-
+    server = http.createServer(function(req, res){
+    });
+	
     server.listen(8080);
-	// socket.io, I choose you
+    logger.authToken = 'my_secret_token_for_the_dashboard_client';
     var socket = io.listen(server);
-    var AUTH_TOKEN = 'my_secret_token_for_the_dashboard_client';
 
     socket.on('connection', function(client){
-        logger.log({'action' : 'connection', 'client' : client.sessionId});
-        client.on('message', function(message) { 
-	    logger.log({'action' : 'message', 'client' : client.sessionId, 'body' : message});
-	    var parsedMsg = JSON.parse(message);
-	    if (parsedMsg.auth_token === AUTH_TOKEN)
-	        logger.socketLogger = client;
-        });
-        client.on('disconnect', function() {
-            logger.log({'action' : 'disconnect', 'client' : client.sessionId});
-        });
+        logger.listen('message', client);
+	logger.listen('disconnect', client);
+	client.on('message', function(message) { 
+    	});
+	client.on('disconnect', function() {
+	});
     });
+
+    logger.listen('connection', socket);
 
 Running the demo
 ================
@@ -60,7 +57,7 @@ Screenshots of demo
 Caveats and Notes
 =================
 
-This is very very early alpha software with an API that I definitely want to change.  Eventually, you won't have to make any explicit log calls at all - socket-logger will just act as a middleware for your Socket.IO server and automatically log incomming connections and messages (something like how Connect or JSGI works).  However, you should still have the ability to log whatever custom calls you want too.
+This is very very early alpha software with an API that I definitely want to change.  I'm not entirely sure what I want the API to be yet.  On one hand, I want the logging to happen transparently (like Connect or JSGI), but on the other hand, it might be too aggressively to log every message.  Will figure this out later when I get some time.
 
 Even more eventually, it'd be kind of cool to have the client-side be some kind of web service.  Real-time socket-based analytics for all?
     

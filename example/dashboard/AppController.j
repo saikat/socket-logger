@@ -32,7 +32,7 @@
 - (void)socketDidConnect:(SCSocket)aSocket
 {
     lps = [0];
-    [theSocket sendMessage:{'auth_token' : 'my_secret_token_for_the_dashboard_client'}];
+    [theSocket sendMessage:{'authToken' : 'my_secret_token_for_the_dashboard_client'}];
     var theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() styleMask:CPBorderlessBridgeWindowMask],
         contentView = [theWindow contentView];
     label1 = [CPTextField labelWithTitle:"Breakdown"];
@@ -75,8 +75,10 @@
     var refreshSpark = function() {
         [label2 setStringValue:"Letters/Sec (" + lps[lps.length-1] + ")"];
         [label2 sizeToFit];
-        [lineChart setData:lps];
         lps.push(0);
+        var theData = [CPArray arrayWithArray:lps];
+        theData.splice(theData.length - 1, 1);
+        [lineChart setData:theData.length > 0 ? theData : [0]];
         if (lps.length > 20)
             lps.shift();
         setTimeout(refreshSpark, 1000);
@@ -94,7 +96,6 @@
     values[theIndex]++;
     [barChart reloadData];
     lps[lps.length - 1]++;
-    [lineChart setData:lps];
 }
 
 - (unsigned)numberOfSetsInChart:(LPChartView)aChart
