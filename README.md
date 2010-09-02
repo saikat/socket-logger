@@ -22,19 +22,19 @@ You will need to install [Socket.IO-node](http://github.com/learnboost/socket.io
     });
 	
     server.listen(8080);
-    logger.authToken = 'my_secret_token_for_the_dashboard_client';
+    log.authToken = 'my_secret_token_for_the_dashboard_client';
     var socket = io.listen(server);
 
     socket.on('connection', function(client){
-        logger.listen('message', client);
-        logger.listen('disconnect', client);
+        log.listen('message', client);
+        log.listen('disconnect', client);
 	client.on('message', function(message) { 
     	});
 	client.on('disconnect', function() {
 	});
     });
 
-    logger.listen('connection', socket);
+    log.listen('connection', socket);
 
 Running the demo
 ================
