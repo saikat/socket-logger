@@ -27,7 +27,7 @@ You will need to install [Socket.IO-node](http://github.com/learnboost/socket.io
 
     socket.on('connection', function(client){
         logger.listen('message', client);
-	logger.listen('disconnect', client);
+        logger.listen('disconnect', client);
 	client.on('message', function(message) { 
     	});
 	client.on('disconnect', function() {
