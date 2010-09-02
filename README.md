@@ -39,6 +39,17 @@ You will need to install [Socket.IO-node](http://github.com/learnboost/socket.io
         });
     });
 
+Running the demo
+================
+
+
+
+Screenshots of demo
+===================
+
+![Client](http://imgur.com/S3Wke.png)
+![Dashboard](http://imgur.com/PJy3x.png)
+
 Caveats and Notes
 =================
 
