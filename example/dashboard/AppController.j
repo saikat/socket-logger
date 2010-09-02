@@ -15,8 +15,11 @@
 {
     SCSocket theSocket;
     LPChartView barChart;
-    LPPieChartView pieChart;
+    LPSparkLine lineChart;
     CPArray values;
+    CPArray lps;
+    CPTextField label1;
+    CPTextField label2;
 }
 
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification
@@ -28,11 +31,12 @@
 
 - (void)socketDidConnect:(SCSocket)aSocket
 {
+    lps = [0];
     [theSocket sendMessage:{'auth_token' : 'my_secret_token_for_the_dashboard_client'}];
     var theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() styleMask:CPBorderlessBridgeWindowMask],
-        contentView = [theWindow contentView],
-        label1 = [CPTextField labelWithTitle:"Breakdown"],
-        label2 = [CPTextField labelWithTitle:"Letters per second"];
+        contentView = [theWindow contentView];
+    label1 = [CPTextField labelWithTitle:"Breakdown"];
+    label2 = [CPTextField labelWithTitle:"Letters/Sec"];
 
     values = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     [label1 setFont:[CPFont fontWithName:"Helvetica" size:48]];
@@ -49,14 +53,35 @@
     [label1 sizeToFit];
     [label2 sizeToFit];
 
-    var barChart = [[LPChartView alloc] initWithFrame:CGRectMake(0, 0, 400, 400)];
+    lineChart = [[LPSparkLine alloc] initWithFrame:CGRectMake(0, 0, 400, 400)];
+    [lineChart setCenter:CGPointMake([contentView center].x + 250, [contentView center].y)];
+    [lineChart setLineWeight:2.0];
+    [lineChart setLineColor:[CPColor colorWithHexString:@"aad8ff"]];
+    [lineChart setShadowColor:[CPColor colorWithHexString:@"999"]];
+    [lineChart setData:[]];
+    [contentView addSubview:lineChart];
+
+    barChart = [[LPChartView alloc] initWithFrame:CGRectMake(0, 0, 400, 400)];
     [barChart setDrawView:[[LPChartDrawView alloc] init]];
-    [barChart setCenter:[contentView center]];
+    [barChart setCenter:CGPointMake([contentView center].x - 250, [contentView center].y)];
     [barChart setDataSource:self];
     [barChart setDisplayGrid:YES];
     [contentView addSubview:barChart];
     [contentView addSubview:label1];
-    [label1 setCenter:CGPointMake([contentView center].x, [barChart frame].origin.y + [barChart frame].size.height + 50)];
+    [contentView addSubview:label2];
+    [label1 setCenter:CGPointMake([contentView center].x - 250, [barChart frame].origin.y + [barChart frame].size.height + 50)];
+    [label2 setCenter:CGPointMake([contentView center].x + 250, [lineChart frame].origin.y + [barChart frame].size.height + 50)];
+    
+    var refreshSpark = function() {
+        [label2 setStringValue:"Letters/Sec (" + lps[lps.length-1] + ")"];
+        [label2 sizeToFit];
+        [lineChart setData:lps];
+        lps.push(0);
+        if (lps.length > 20)
+            lps.shift();
+        setTimeout(refreshSpark, 1000);
+    }
+    setTimeout(refreshSpark, 1000);
 
     [contentView setBackgroundColor:[CPColor colorWithHexString:"E0E0E0"]];
     [theWindow orderFront:self];
@@ -68,6 +93,8 @@
     var theIndex = theLetter.charCodeAt(0) - 'a'.charCodeAt(0);
     values[theIndex]++;
     [barChart reloadData];
+    lps[lps.length - 1]++;
+    [lineChart setData:lps];
 }
 
 - (unsigned)numberOfSetsInChart:(LPChartView)aChart
