@@ -21,6 +21,7 @@ You will need to install [Socket.IO-node](http://github.com/learnboost/socket.io
 	server = http.createServer(function(req, res){
 	});
 
+    server.listen(8080);
 	// socket.io, I choose you
     var socket = io.listen(server);
     var AUTH_TOKEN = 'my_secret_token_for_the_dashboard_client';

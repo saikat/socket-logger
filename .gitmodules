@@ -1,0 +1,15 @@
+[submodule "example/socket.io"]
+	path = example/socket.io
+	url = git://github.com/LearnBoost/Socket.IO-node.git
+[submodule "example/client/Frameworks/SCSocket"]
+	path = example/client/Frameworks/SCSocket
+	url = git://github.com/saikat/SCSocket.git
+[submodule "example/client/Frameworks/LPKit"]
+	path = example/client/Frameworks/LPKit
+	url = git://github.com/luddep/LPKit.git
+[submodule "example/dashboard/Frameworks/LPKit"]
+	path = example/dashboard/Frameworks/LPKit
+	url = git://github.com/luddep/LPKit.git
+[submodule "example/dashboard/Frameworks/SCSocket"]
+	path = example/dashboard/Frameworks/SCSocket
+	url = git://github.com/saikat/SCSocket.git
