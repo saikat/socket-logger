@@ -91,11 +91,14 @@
 
 - (void)socket:(SCSocket)aSocket didReceiveMessage:(CPString)aMessage
 {
-    var theLetter = aMessage.body.c;
-    var theIndex = theLetter.charCodeAt(0) - 'a'.charCodeAt(0);
-    values[theIndex]++;
-    [barChart reloadData];
-    lps[lps.length - 1]++;
+    if (aMessage.body && aMessage.body.c)
+    {
+        var theLetter = aMessage.body.c;
+        var theIndex = theLetter.charCodeAt(0) - 'a'.charCodeAt(0);
+        values[theIndex]++;
+        [barChart reloadData];
+        lps[lps.length - 1]++;
+    }
 }
 
 - (unsigned)numberOfSetsInChart:(LPChartView)aChart
