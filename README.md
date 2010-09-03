@@ -29,7 +29,7 @@ You will need to install [Socket.IO-node](http://github.com/learnboost/socket.io
         client.on('message', function(message) { 
     	});
         client.on('disconnect', function() {
-	});
+        });
     });
 
     logger.logLevel = 2;
