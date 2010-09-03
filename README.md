@@ -1,19 +1,16 @@
-Socket Logger: Real-time, JSON-parsable logging for [Socket.IO](http://github.com/learnboost/socket.io-node)
+Socket Logger: JSON-parsable logging for [Socket.IO](http://github.com/learnboost/socket.io-node)
 ===============================================================
 
-The code is really simple and fairly trivial right now, but is enough for my immediate needs.  See notes below for where I want to take it.
+By default, socket logger is a simple logger that you can use with your [Socket.IO](http://github.com/learnboost/socket.io-node)-based node server.  Depending on the log level used, you can log connections, disconnections, message requests, and the actual contents of messages.  
 
-By default, socket logger is a simple logger that you can use with your [Socket.IO](http://github.com/learnboost/socket.io-node)-based node server.  
+The log format is currently not in Apache Common Log Format, but instead JSON-parsable strings.  I think this makes it easier to write scripts to crawl my logs (especially since most message payloads are in JSON), but ideally the log format can be specified.
 
-It's a little different from other loggers in that you can log not just connections and disconnections, but also each message.  Also, the log format is not Apache Common Log Format, but instead JSON-parsable strings.  So, you log JS objects, not strings.
-
-The secret sauce of socket-logger is how easy it makes it to set up a web client that gets information about your server.  Simply create a Socket.IO client that connects to your server with a specified auth token, and now your client gets JSON messages about all the socket connections and messages your server is handling.  Check out the example for a demo of this.
+Socket-logger also provides a hook to set up a web client that gets information about your server in real-time.  Simply create a Socket.IO client that connects to your server with a specified auth token, and now your client gets JSON messages pushed to it about your server activity.  Check out the example for a demo of this.
 
 How to use
 ============
 
 You will need to install [Socket.IO-node](http://github.com/learnboost/socket.io-node) and have a socket-io server running.  Then, clone this repo.  Now put this in your server and smoke it:
-
 
     var http = require('http'), 
     logger = require('../lib/socket-logger').defaultLogger,
@@ -43,7 +40,7 @@ Running the demo
 2. Run "node server.js" in the example folder
 3. Open example/client/index.html in your browser
 4. Open example/dashboard/index.html in another windew
-5. Start tying in the client asd watch the dashboard.
+5. Start typing in the client asd watch the dashboard.
 
 Screenshots of demo
 ===================
@@ -57,9 +54,8 @@ Screenshots of demo
 Caveats and Notes
 =================
 
-This is very very early alpha software with an API that I definitely want to change.  I'm not entirely sure what I want the API to be yet.  On one hand, I want the logging to happen transparently (like Connect or JSGI), but on the other hand, it might be too aggressively to log every message.  Will figure this out later when I get some time.
-
-Even more eventually, it'd be kind of cool to have the client-side be some kind of web service.  Real-time socket-based analytics for all?
+* I haven't benchmarked this code.  It's probably fine for many cases, but high-traffic socket servers will need to make sure this doesn't kill performance (especially at higher log levels).
+* It'd be kind of cool to have the client-side be some kind of web service.  Real-time socket-based analytics for all?
     
 License
 =======
