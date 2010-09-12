@@ -3,9 +3,9 @@ Socket Logger: JSON-parsable logging for [Socket.IO](http://github.com/learnboos
 
 By default, socket logger is a simple logger that you can use with your [Socket.IO](http://github.com/learnboost/socket.io-node)-based node server.  Depending on the log level used, you can log connections, disconnections, message requests, and the actual contents of messages.  
 
-The log format is currently not in Apache Common Log Format, but instead JSON-parsable strings.  I think this makes it easier to write scripts to crawl my logs (especially since most message payloads are in JSON), but I'll eventually make it so that the log format can be specified.
+Socket-logger expects your messages to be JSON (if you are using message-level logging) and outputs arrays to the log file.  
 
-Socket-logger also provides a hook to set up a web client that gets information about your server in real-time.  Simply create a Socket.IO client that connects to your server with a specified auth token, and now your client gets JSON messages pushed to it about your server activity.  Check out the example for a demo of this.
+Socket-logger also provides a you with a hook to set up a web client that gets your log messages in real-time.  Simply create a Socket.IO client that connects to your server with a specified auth token, and now your client will get JSON messages pushed to it about your server activity.  Check out the example for a demo of this.
 
 How to use
 ============
@@ -32,6 +32,8 @@ You will need to install [Socket.IO-node](http://github.com/learnboost/socket.io
     logger.logLevel = 2;
     logger.authToken = 'my_secret_token_for_the_dashboard_client';
     logger.monitor(socket);
+
+You can additionally specify a messageFormatter that outputs the information you care about (as a JSON object) if you are using log level 2.
 
 Running the demo
 ================
